@@ -12,5 +12,5 @@ We then compute the trend (rate of sea-level change), and quantify three types o
 
 The methods used to obtain this dataset, as well as the results, are presented in the manuscript "Trends and Uncertainties of Regional Barystatic Sea-level Change in the Satellite Altimetry Era", in submission process. 
 
-This scripts assume that you have a folder with the dataset to run. The dataset will be made public once the manuscript has been peer reviewed. 
+These scripts assume that you have a folder with the dataset to run. The dataset will be made public once the manuscript has been peer reviewed. 
  
