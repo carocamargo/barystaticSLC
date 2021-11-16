@@ -13,5 +13,7 @@ We then compute the trend (rate of sea-level change), and quantify three types o
 The methods used to obtain this dataset, as well as the results, are presented in the manuscript "Trends and Uncertainties of Regional Barystatic Sea-level Change in the Satellite Altimetry Era", submited to *Earth System Dynamics*, on **open discussion** now. 
 [Link to manuscript preprint](https://esd.copernicus.org/preprints/esd-2021-80/)
 
-These scripts assume that you have a folder with the dataset to run. The dataset will be made public once the manuscript has been peer reviewed. 
+These scripts assume that you have a folder with the dataset to run. The dataset (draft) is available [here](https://data.4tu.nl/articles/dataset/Data_underlying_the_publication_Regional_barystatic_sea-level_trends_and_uncertainties_1993-2016/16778794). 
+
+**Please note that the both the manuscript and dataset have not undergo peer review yet!**
  
