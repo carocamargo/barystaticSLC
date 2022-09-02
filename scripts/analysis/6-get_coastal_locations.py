@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct  6 15:08:25 2021
+Created on Fri Jan  7 17:54:18 2022
 
 @author: ccamargo
 """
 
+
 import pandas as pd
 import xarray as xr
+from cartopy import crs as ccrs# , feature as cfeature
+import matplotlib.pyplot as plt
 import numpy as np
 
 #%% find closest points of our TG, make sure that they are water
@@ -92,66 +95,11 @@ def find_nearest(da,qlats,qlons):
     return min_dists, min_idx, out_lat, out_lon
 
 
-#% % sel 10 coastal location
-cat = pd.read_pickle('/Volumes/LaCie_NIOZ/data/barystatic/coastal_locations.p')
 
-cities= [
-    'Rotterdam', 
-    'Rio_de_Janeiro',
-    # 'Salvador','San Diego', 
-         # 'New York-Newark',
-         # 'Sydney','Belém',
-         # 'Vancouver','Montreal','Shanghai',
-         # 'Hong Kong',
-         # 'Barranquilla',
-         'Jakarta',
-         # 'Dublin',
-         'Tokyo',
-          # 'Dar-el-Beida (Casablanca)',
-          # 'Lagos',
-         'Lima',
-         # 'Manila',
-         # 'Dakar',
-         'Cape Town',
-          # 'Istanbul', 
-         # 'London', 
-         # 'Montevideo',
-         # 'Maracaibo',
-         # 'Maputo', # mozambique
-          'Muqdisho (Mogadishu)', # Somalia
-         # 'Dar-es-Salaam', # tanzania
-          # 'Luanda',
-        'Sydney',
-        # 'Perth',
-        # 'Dhaka',
-        # 'Belém','Natal','Rio_de_Janeiro',
-        'Vancouver',
-        # 'Porto',
-        # 'Shanghai',
-        # 'Barranquilla',
-        # 'Abidjan',
-        # 'Santo Domingo',
-        # 'Guayaquil',
-        # 'Accra',
-        # 'Mumbai (Bombay)',
-        # 'Kochi (Cochin)',
-        # 'Dublin',
-        # 'Napoli (Naples)',
-        # 'Maputo',
-        # 'Boston',
-        # 'San Francisco - Oakland',
-        'Virginia Beach', 
-        # 'Miami', 
-        # 'New Orleans',
-        # 'Antofagasta'
-        
-        
-        ]
-cat = cat[cat['City'].isin(cities)].reset_index()
 #%%
 periods =[
-          (2005,2016),
-           (1993,2018),
+    # (2005,2016),
+          (1993,2018),
           (2003,2017)
           ]
 for period in periods:
@@ -160,15 +108,45 @@ for period in periods:
     #% % open OM dataset
     # t0=2005
     # t1=2015
-    path = '/Volumes/LaCie_NIOZ/data/barystatic/results/{}-{}/'.format(t0,t1)
+    path = '/Volumes/LaCie_NIOZ/data/barystatic/revisions/results_final/{}-{}/'.format(t0,t1)
     # path = '/Users/ccamargo/Desktop/'
-    df=pd.read_pickle(path+'OM_reconstructions_OLS-prop_{}-{}.p'.format(t0,t1))
+    df=pd.read_pickle(path+'OM_reconstructions_{}-{}.p'.format(t0,t1))
+    
+    
+    
+    #% % sel 10
+    cat = pd.read_pickle('/Volumes/LaCie_NIOZ/data/barystatic/coastal_locations.p')
+    
+    cities= [
+        'Rotterdam', 
+        'Rio_de_Janeiro',
+         'Jakarta',
+             'Tokyo',
+             'Lima',
+             'Cape Town',
+              'Muqdisho (Mogadishu)', # Somalia
+            'Sydney',
+            'Vancouver',
+            
+            'Virginia Beach', 
+            
+            ]
+    cat = cat[cat['City'].isin(cities)].reset_index()
+    
     
     #% % add mask
     ds=xr.open_dataset('/Volumes/LaCie_NIOZ/data/barystatic/masks/LAND_MASK_CRI-JPL_180x360_conservative.nc')
     ds.mask.plot()
     ds=ds.sortby('lat',ascending=False)
-
+    # % % add mask
+    # path_mask='/Users/ccamargo/Documents/PhD/Barystatic/SLM_run/model/topo/'
+    # dimlat=180;dimlon=360
+    # f=path_mask+'/mask-'+str(dimlat)+'.xyz'
+    # df_mask=pd.read_csv(f,header=None,sep='\s+')
+    # df_mask.columns=['lon','lat','msk']
+    # df['msk']=df_mask['msk']
+    #% %
+    # df['msk']=np.array(ds.mask).flatten()
     mask=np.array(ds.mask)
     mask[130:150,4:5]=10;
     print(ds.lat[130:150])
@@ -177,6 +155,26 @@ for period in periods:
     df['llon']=df['lon']
     df_multiindex = df.set_index([ 'lat','lon'])
     ds=df_multiindex.to_xarray()
+    
+    
+    # ds.msk.plot()
+    # fig = plt.figure(dpi=300)
+    # ax = plt.axes(projection=ccrs.PlateCarree())
+    # plt.title('mask')
+    # ax.coastlines(resolution='110m')
+    # ax.set_global()
+    # # plt.savefig('map.png')
+    # splot = ax.scatter(
+    #     "lon","lat",
+    #     c="msk", # color by a variable
+    #     data=df,
+    #     s=10,
+    #     cmap="plasma",
+    #     transform=ccrs.PlateCarree(),
+    #     zorder=0
+    #     )
+    # # plt.colorbar(splot, orientation ='horizontal', label='OM Trend')
+    # plt.show()
     
     
     #% % find closest point in the 1degree resolution
@@ -215,4 +213,4 @@ for period in periods:
     # plt.colorbar(splot, orientation ='horizontal', label='OM Trend')
     # plt.show()
     #% % save df
-    df2.to_pickle(path+'coastal_examples_10-prop_{}-{}.p'.format(t0,t1))
+    df2.to_pickle(path+'coastal_examples_10_{}-{}.p'.format(t0,t1))
