@@ -1,4 +1,5 @@
 # Regional mass-driven sea-level change trends and uncertainties
+[![DOI](https://zenodo.org/badge/378197366.svg)](https://zenodo.org/badge/latestdoi/378197366)
 
 
 Mass-driven sea-level change (also known as barystatic sea-level change) is driven by the exchange of freshwater between the land and the ocean, such as melting of continental ice from glaciers and ice sheets, and variations in land water storage.
